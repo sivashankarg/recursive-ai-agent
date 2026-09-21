@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090d18">
+<title>Recursive AI Agent</title>
+<style>
+:root{color-scheme:dark;--bg:#090d18;--card:#111827;--line:#263247;--text:#eef2ff;--muted:#94a3b8;--accent:#7c3aed;--accent2:#06b6d4;--good:#22c55e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#172554 0,#090d18 42%);font:15px -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;color:var(--text);min-height:100vh}
+main{width:min(980px,100%);margin:auto;padding:22px 16px 48px}
+h1{font-size:28px;margin:0 0 5px}.sub{color:var(--muted);margin-bottom:20px}
+.card{background:rgba(17,24,39,.88);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 12px 35px rgba(0,0,0,.18)}
+label{display:block;color:#cbd5e1;font-weight:650;margin:0 0 8px}
+textarea,input,select{width:100%;background:#0b1220;color:var(--text);border:1px solid #334155;border-radius:12px;padding:12px;font:inherit;outline:none}
+textarea{min-height:100px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:650px){.row{grid-template-columns:1fr}}
+button{border:0;border-radius:12px;padding:12px 16px;font:700 15px inherit;cursor:pointer;color:white;background:linear-gradient(135deg,var(--accent),#4f46e5);margin:5px 5px 0 0}
+button.secondary{background:#1e293b}button.stop{background:#7f1d1d}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#172033;color:#a5b4fc;font-size:12px;margin:3px}
+#status{color:#a5f3fc}#log{white-space:pre-wrap;max-height:360px;overflow:auto;background:#070b13;border-radius:12px;padding:12px;color:#cbd5e1;font:13px ui-monospace,SFMono-Regular,monospace}
+.memory{max-height:300px;overflow:auto}.mem{padding:10px 0;border-bottom:1px solid #243047}.mem:last-child{border:0}.small{font-size:12px;color:var(--muted)}a{color:#67e8f9}
+.ok{color:#86efac}.warn{color:#fde68a}
+</style>
+</head>
+<body>
+<main>
+  <h1>🧠 Recursive AI Agent</h1>
+  <div class="sub">Standalone project • mobile-first • persistent memory • internet research • no portfolio files involved</div>
+
+  <section class="card">
+    <label for="goal">Goal</label>
+    <textarea id="goal" placeholder="Example: Learn how 4G EPC S11 Create Session failures are diagnosed."></textarea>
+    <div class="row">
+      <div>
+        <label for="iterations">Iterations</label>
+        <select id="iterations"><option>1</option><option selected>3</option><option>5</option><option>10</option></select>
+      </div>
+      <div>
+        <label>Engine</label>
+        <div style="padding:12px 0"><span class="pill">Browser reasoning</span><span class="pill">Wikipedia research</span><span class="pill">localStorage memory</span></div>
+      </div>
+    </div>
+    <button id="run">▶ Run Agent</button>
+    <button id="stop" class="stop">■ Stop</button>
+    <button id="clear" class="secondary">Clear memory</button>
+    <button id="export" class="secondary">Export memory</button>
+  </section>
+
+  <section class="card">
+    <div><b>Status:</b> <span id="status">Ready</span></div>
+    <div style="margin-top:10px"><b>Iterations:</b> <span id="count">0</span> &nbsp; <b>Memory:</b> <span id="memCount">0</span></div>
+  </section>
+
+  <section class="card">
+    <label>Execution log</label>
+    <div id="log">Agent initialized. Press Run Agent.</div>
+  </section>
+
+  <section class="card">
+    <label>Persistent memory</label>
+    <div id="memory" class="memory"><span class="small">No memories yet.</span></div>
+  </section>
+
+  <section class="card small">
+    <b>What this V1 does:</b> breaks a goal into recursive sub-goals, researches relevant public Wikipedia material, extracts evidence, writes a structured learning result into persistent browser memory, and uses previous memory on the next iteration. Nothing is sent to your portfolio repository. This is a static web app, so it cannot safely contain a secret API key.
+    <br><br>
+    <span class="warn">Next upgrade:</span> optional open-model inference (Hugging Face/WebLLM) can be added as a separate engine without changing this repository's isolation.
+  </section>
+</main>
+<script>
+const KEY="recursive-ai-agent-memory-v1";
+let memory=JSON.parse(localStorage.getItem(KEY)||"[]"),running=false,stopRequested=false;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(memory));renderMemory()}
+function log(s){$("log").textContent += "\n"+s;$("log").scrollTop=$("log").scrollHeight}
+function renderMemory(){
+ $("memCount").textContent=memory.length;
+ $("memory").innerHTML=memory.length?memory.slice().reverse().map(m=>`<div class="mem"><b>${esc(m.topic)}</b><div class="small">${new Date(m.time).toLocaleString()}</div><div>${esc(m.summary)}</div>${m.sources?.length?`<div class="small">Sources: ${m.sources.map(s=>`<a target="_blank" rel="noopener" href="${escAttr(s.url)}">${esc(s.title)}</a>`).join(" · ")}</div>`:""}</div>`).join(""):"<span class='small'>No memories yet.</span>";
+}
+function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
+function escAttr(x){return String(x??"").replace(/["<>]/g,"")}
+async function research(q){
+ const url="https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&srlimit=4&format=json&origin=*";
+ const r=await fetch(url); if(!r.ok) throw Error("Research request failed: "+r.status);
+ const j=await r.json(); const hits=j?.query?.search||[];
+ const out=[];
+ for(const h of hits){
+   if(stopRequested) break;
+   try{
+    const sr=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(h.title.replaceAll(" ","_")));
+    if(sr.ok){const d=await sr.json();out.push({title:d.title||h.title,summary:d.extract||h.snippet||"",url:d.content_urls?.desktop?.page||("https://en.wikipedia.org/wiki/"+encodeURIComponent(h.title.replaceAll(" ","_")))})}
+   }catch{}
+ }
+ return out;
+}
+function synth(goal, evidence, prior){
+ const terms=goal.split(/\s+/).filter(x=>x.length>4).slice(0,8);
+ const useful=evidence.map(e=>e.summary).filter(Boolean);
+ let summary="Goal: "+goal+"\n\nKey evidence:\n"+(useful.length?useful.map((x,i)=>(i+1)+". "+x.slice(0,420)).join("\n"):"No external evidence returned.");
+ if(prior.length) summary+="\n\nPrevious memory considered: "+prior.slice(-2).map(x=>x.summary.slice(0,180)).join(" | ");
+ summary+="\n\nNext self-directed step: refine the question around "+(terms.join(", ")||"the original goal")+".";
+ return summary;
+}
+async function runAgent(){
+ if(running)return; const goal=$("goal").value.trim(); if(!goal){alert("Enter a goal first.");return}
+ running=true;stopRequested=false;$("status").textContent="Running";$("log").textContent="";
+ const n=Number($("iterations").value);
+ try{
+  for(let i=1;i<=n;i++){
+   if(stopRequested)break;
+   $("count").textContent=i; log("\n=== Iteration "+i+" / "+n+" ===");
+   const prior=memory.filter(m=>m.goal===goal);
+   const q=i===1?goal:(goal+" "+(prior.at(-1)?.next||"new angle"));
+   log("Planning research: "+q);
+   let evidence=[];
+   try{evidence=await research(q);log("Research returned "+evidence.length+" source(s).")}catch(e){log("Research unavailable: "+e.message)}
+   const summary=synth(goal,evidence,prior);
+   const next="Investigate the strongest unresolved point from iteration "+i+" and compare it with prior evidence.";
+   memory.push({time:Date.now(),goal,topic:"Iteration "+i+": "+goal,summary,sources:evidence.map(e=>({title:e.title,url:e.url})),next});
+   save(); log("Memory saved. Recursive state updated.");
+   await new Promise(r=>setTimeout(r,450));
+  }
+  $("status").textContent=stopRequested?"Stopped":"Complete";
+  log("\n=== Agent "+(stopRequested?"stopped":"complete")+" ===");
+ }finally{running=false}
+}
+$("run").onclick=runAgent;$("stop").onclick=()=>{stopRequested=true;$("status").textContent="Stopping…"};$("clear").onclick=()=>{if(confirm("Delete all agent memory from this browser?")){memory=[];save();log("Memory cleared.")}};$("export").onclick=()=>{const b=new Blob([JSON.stringify(memory,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="recursive-agent-memory.json";a.click();URL.revokeObjectURL(a.href)};
+renderMemory();
+</script>
+</body>
+</html>
