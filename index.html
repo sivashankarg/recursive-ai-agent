@@ -3,129 +3,188 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090d18">
-<title>Recursive AI Agent</title>
+<meta name="theme-color" content="#080c16">
+<title>Recursive AI Agent V4</title>
 <style>
-:root{color-scheme:dark;--bg:#090d18;--card:#111827;--line:#263247;--text:#eef2ff;--muted:#94a3b8;--accent:#7c3aed;--accent2:#06b6d4;--good:#22c55e}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#172554 0,#090d18 42%);font:15px -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;color:var(--text);min-height:100vh}
-main{width:min(980px,100%);margin:auto;padding:22px 16px 48px}
-h1{font-size:28px;margin:0 0 5px}.sub{color:var(--muted);margin-bottom:20px}
-.card{background:rgba(17,24,39,.88);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 12px 35px rgba(0,0,0,.18)}
-label{display:block;color:#cbd5e1;font-weight:650;margin:0 0 8px}
-textarea,input,select{width:100%;background:#0b1220;color:var(--text);border:1px solid #334155;border-radius:12px;padding:12px;font:inherit;outline:none}
-textarea{min-height:100px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--accent)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:650px){.row{grid-template-columns:1fr}}
-button{border:0;border-radius:12px;padding:12px 16px;font:700 15px inherit;cursor:pointer;color:white;background:linear-gradient(135deg,var(--accent),#4f46e5);margin:5px 5px 0 0}
-button.secondary{background:#1e293b}button.stop{background:#7f1d1d}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#172033;color:#a5b4fc;font-size:12px;margin:3px}
-#status{color:#a5f3fc}#log{white-space:pre-wrap;max-height:360px;overflow:auto;background:#070b13;border-radius:12px;padding:12px;color:#cbd5e1;font:13px ui-monospace,SFMono-Regular,monospace}
-.memory{max-height:300px;overflow:auto}.mem{padding:10px 0;border-bottom:1px solid #243047}.mem:last-child{border:0}.small{font-size:12px;color:var(--muted)}a{color:#67e8f9}
-.ok{color:#86efac}.warn{color:#fde68a}
+:root{color-scheme:dark;--bg:#080c16;--card:#101827;--line:#273449;--text:#f1f5f9;--muted:#94a3b8;--a:#7c3aed;--b:#06b6d4;--good:#4ade80;--bad:#fb7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#172554 0,#080c16 42%);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
+main{width:min(1050px,100%);margin:auto;padding:20px 14px 60px}h1{font-size:28px;margin:0}.sub{color:var(--muted);margin:5px 0 18px}
+.card{background:rgba(16,24,39,.92);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 12px 35px #0003}
+label{display:block;font-weight:700;margin:0 0 7px;color:#cbd5e1}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+textarea,input,select{width:100%;background:#090f1c;color:var(--text);border:1px solid #344257;border-radius:11px;padding:11px;font:inherit}textarea{min-height:100px;resize:vertical}
+button{border:0;border-radius:11px;padding:11px 15px;margin:5px 5px 0 0;color:white;background:linear-gradient(135deg,var(--a),#4f46e5);font-weight:750;cursor:pointer}button.secondary{background:#1e293b}button.stop{background:#7f1d1d}
+.pill{display:inline-block;border:1px solid #334155;border-radius:999px;padding:5px 9px;margin:3px;color:#bae6fd;background:#0b1423;font-size:12px}
+#output{white-space:pre-wrap;line-height:1.55;min-height:180px;max-height:620px;overflow:auto;background:#070b13;border-radius:12px;padding:14px}
+#log{white-space:pre-wrap;max-height:230px;overflow:auto;background:#070b13;border-radius:12px;padding:12px;color:#cbd5e1;font:12px ui-monospace,monospace}
+.mem{border-bottom:1px solid #243047;padding:10px 0}.small{font-size:12px;color:var(--muted)}.ok{color:var(--good)}.warn{color:#fde68a}.bad{color:var(--bad)}
+a{color:#67e8f9}.switch{display:flex;gap:8px;align-items:center;margin-top:9px}.switch input{width:auto}
+.progress{height:8px;background:#1e293b;border-radius:99px;overflow:hidden;margin-top:8px}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
 </style>
 </head>
 <body>
 <main>
-  <h1>🧠 Recursive AI Agent</h1>
-  <div class="sub">Standalone project • mobile-first • persistent memory • internet research • no portfolio files involved</div>
+<h1>🧠 Recursive AI Agent V4</h1>
+<div class="sub">Autonomous learning • free/open models • internet research • persistent course memory • standalone repository</div>
 
-  <section class="card">
-    <label for="goal">Goal</label>
-    <textarea id="goal" placeholder="Example: Learn how 4G EPC S11 Create Session failures are diagnosed."></textarea>
-    <div class="row">
-      <div>
-        <label for="iterations">Iterations</label>
-        <select id="iterations"><option>1</option><option selected>3</option><option>5</option><option>10</option></select>
-      </div>
-      <div>
-        <label>Engine</label>
-        <div style="padding:12px 0"><span class="pill">Browser reasoning</span><span class="pill">Wikipedia research</span><span class="pill">localStorage memory</span></div>
-      </div>
-    </div>
-    <button id="run">▶ Run Agent</button>
-    <button id="stop" class="stop">■ Stop</button>
-    <button id="clear" class="secondary">Clear memory</button>
-    <button id="export" class="secondary">Export memory</button>
-  </section>
+<section class="card">
+<label>What should the agent master?</label>
+<textarea id="goal">Teach me telecom, computer networking and cloud from BASIC → INTERMEDIATE → ADVANCED → INTERVIEW READY. Focus on 4G LTE/EPC, 5G fundamentals, IP/TCP/IP, routing, switching, OSPF, BGP, MPLS, VRF, QoS, DNS/DHCP, firewalls, Linux, AWS/OpenStack and troubleshooting.</textarea>
+<div class="grid">
+<div><label>Learning cycles</label><select id="cycles"><option>1</option><option selected>3</option><option>5</option><option>10</option></select></div>
+<div><label>Mode</label><select id="mode"><option value="cloud">Advanced cloud AI — OpenRouter</option><option value="local">Local AI — WebLLM, no API key</option><option value="research">Research + deterministic study planner — no API key</option></select></div>
+</div>
+<div style="margin-top:12px">
+<span class="pill">Curriculum planner</span><span class="pill">Researcher</span><span class="pill">Teacher</span><span class="pill">Quizzer</span><span class="pill">Reviewer</span><span class="pill">Memory</span>
+</div>
+<button id="run">▶ Start autonomous learning</button>
+<button id="stop" class="stop">■ Stop</button>
+<button id="ask" class="secondary">💬 Ask agent</button>
+</section>
 
-  <section class="card">
-    <div><b>Status:</b> <span id="status">Ready</span></div>
-    <div style="margin-top:10px"><b>Iterations:</b> <span id="count">0</span> &nbsp; <b>Memory:</b> <span id="memCount">0</span></div>
-  </section>
+<section class="card">
+<label>AI configuration</label>
+<div class="grid">
+<div>
+<label>OpenRouter API key (optional for cloud mode)</label>
+<input id="key" type="password" placeholder="sk-or-v1-…">
+<div class="small">Stored only in this browser. Never commit it to GitHub. Free OpenRouter models are $0/token, subject to account/rate limits.</div>
+</div>
+<div>
+<label>Model</label>
+<select id="model">
+<option value="openrouter/free">openrouter/free — automatic free model</option>
+<option value="nvidia/nemotron-3-super:free">NVIDIA Nemotron 3 Super (free)</option>
+<option value="google/gemma-4-31b-it:free">Google Gemma 4 31B (free)</option>
+<option value="openai/gpt-oss-120b:free">OpenAI GPT-OSS 120B (free)</option>
+<option value="qwen/qwen3-coder:free">Qwen3 Coder (free, if available)</option>
+</select>
+</div>
+</div>
+<div class="switch"><input id="web" type="checkbox"><span>Use OpenRouter live web search when cloud AI is active <span class="warn">(web-search service availability/cost can differ from free model tokens)</span></span></div>
+<div class="switch"><input id="rememberKey" type="checkbox" checked><span>Remember API key on this device</span></div>
+</section>
 
-  <section class="card">
-    <label>Execution log</label>
-    <div id="log">Agent initialized. Press Run Agent.</div>
-  </section>
+<section class="card">
+<b>Status:</b> <span id="status">Ready</span>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div style="margin-top:9px"><b>Cycle:</b> <span id="count">0</span> &nbsp; <b>Knowledge records:</b> <span id="memCount">0</span></div>
+</section>
 
-  <section class="card">
-    <label>Persistent memory</label>
-    <div id="memory" class="memory"><span class="small">No memories yet.</span></div>
-  </section>
+<section class="card"><label>Agent output</label><div id="output">Ready. Give the agent a goal and start learning.</div></section>
+<section class="card"><label>Execution log</label><div id="log">V4 initialized.</div></section>
 
-  <section class="card small">
-    <b>What this V1 does:</b> breaks a goal into recursive sub-goals, researches relevant public Wikipedia material, extracts evidence, writes a structured learning result into persistent browser memory, and uses previous memory on the next iteration. Nothing is sent to your portfolio repository. This is a static web app, so it cannot safely contain a secret API key.
-    <br><br>
-    <span class="warn">Next upgrade:</span> optional open-model inference (Hugging Face/WebLLM) can be added as a separate engine without changing this repository's isolation.
-  </section>
+<section class="card">
+<label>Long-term learning memory</label>
+<div id="memory"></div>
+<button id="clear" class="secondary">Clear learning memory</button>
+<button id="export" class="secondary">Export memory</button>
+</section>
+
+<section class="card small">
+<b>How V4 learns:</b> it maintains a curriculum state, chooses the next knowledge gap, researches public sources, asks the selected model to teach/explain, generates checks and troubleshooting exercises, stores the result locally, and uses previous records to choose the next cycle. It does <b>not</b> secretly rewrite its own code; that would be unsafe in a public static site. Instead it self-improves its <b>learning plan, knowledge state and next actions</b>.
+<br><br>
+<b>No-key mode:</b> WebLLM can run an open model in the browser when the device/browser supports WebGPU. On iPhone/Safari, larger local models can be memory-intensive, so the V4 local default is intentionally small. WebLLM documents browser/WebGPU inference, and its issue tracker contains reports of larger models crashing iOS Safari, so cloud mode is the practical route for stronger models. 
+</section>
 </main>
+
 <script>
-const KEY="recursive-ai-agent-memory-v1";
-let memory=JSON.parse(localStorage.getItem(KEY)||"[]"),running=false,stopRequested=false;
-const $=id=>document.getElementById(id);
-function save(){localStorage.setItem(KEY,JSON.stringify(memory));renderMemory()}
-function log(s){$("log").textContent += "\n"+s;$("log").scrollTop=$("log").scrollHeight}
+const MEM="recursive-ai-agent-v4-memory";
+const SET="recursive-ai-agent-v4-settings";
+let memory=JSON.parse(localStorage.getItem(MEM)||"[]"),running=false,stop=false,localEngine=null;
+const $=x=>document.getElementById(x);
+function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
+function save(){localStorage.setItem(MEM,JSON.stringify(memory));renderMemory()}
+function log(x){$("log").textContent+="\n"+x;$("log").scrollTop=$("log").scrollHeight}
 function renderMemory(){
  $("memCount").textContent=memory.length;
- $("memory").innerHTML=memory.length?memory.slice().reverse().map(m=>`<div class="mem"><b>${esc(m.topic)}</b><div class="small">${new Date(m.time).toLocaleString()}</div><div>${esc(m.summary)}</div>${m.sources?.length?`<div class="small">Sources: ${m.sources.map(s=>`<a target="_blank" rel="noopener" href="${escAttr(s.url)}">${esc(s.title)}</a>`).join(" · ")}</div>`:""}</div>`).join(""):"<span class='small'>No memories yet.</span>";
+ $("memory").innerHTML=memory.length?memory.slice(-12).reverse().map((m,i)=>"<div class='mem'><b>"+esc(m.stage||"Learning record")+"</b><div class='small'>"+new Date(m.time).toLocaleString()+"</div><div>"+esc(m.text).slice(0,1800)+"</div></div>").join(""):"<span class='small'>No learning records yet.</span>";
 }
-function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
-function escAttr(x){return String(x??"").replace(/["<>]/g,"")}
-async function research(q){
- const url="https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&srlimit=4&format=json&origin=*";
- const r=await fetch(url); if(!r.ok) throw Error("Research request failed: "+r.status);
- const j=await r.json(); const hits=j?.query?.search||[];
- const out=[];
- for(const h of hits){
-   if(stopRequested) break;
-   try{
-    const sr=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(h.title.replaceAll(" ","_")));
-    if(sr.ok){const d=await sr.json();out.push({title:d.title||h.title,summary:d.extract||h.snippet||"",url:d.content_urls?.desktop?.page||("https://en.wikipedia.org/wiki/"+encodeURIComponent(h.title.replaceAll(" ","_")))})}
-   }catch{}
+function settingsLoad(){try{let s=JSON.parse(localStorage.getItem(SET)||"{}");if(s.key)$("key").value=s.key;if(s.model)$("model").value=s.model;if(s.web)$("web").checked=true}catch{}}
+function settingsSave(){if($("rememberKey").checked)localStorage.setItem(SET,JSON.stringify({key:$("key").value,model:$("model").value,web:$("web").checked}));else localStorage.removeItem(SET)}
+async function webResearch(q){
+ const url="https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&srlimit=5&format=json&origin=*";
+ const r=await fetch(url);if(!r.ok)throw Error("Wikipedia search "+r.status);
+ const j=await r.json();return (j.query?.search||[]).map(x=>({title:x.title,snippet:x.snippet.replace(/<[^>]+>/g,""),url:"https://en.wikipedia.org/wiki/"+encodeURIComponent(x.title.replaceAll(" ","_"))}));
+}
+async function openRouter(prompt){
+ const key=$("key").value.trim();if(!key)throw Error("OpenRouter API key required for cloud mode.");
+ const body={model:$("model").value,messages:[
+  {role:"system",content:"You are the Recursive Learning Architect. Teach accurately, progressively and practically. Separate established facts from uncertain claims. Prefer primary/official standards and documentation when known. For telecom use 3GPP terminology; for networking use RFC concepts; for cloud distinguish vendor-specific behavior. Never pretend you verified a source you did not receive. At the end provide: What I learned; Common mistakes; Troubleshooting logic; 5-question quiz with answers hidden after a divider; Next knowledge gap."},
+  {role:"user",content:prompt}
+ ],temperature:.25};
+ if($("web").checked)body.tools=[{type:"openrouter:web_search",parameters:{max_results:5}}];
+ const r=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":location.href,"X-Title":"Recursive AI Agent V4"},body:JSON.stringify(body)});
+ const j=await r.json();if(!r.ok)throw Error(j.error?.message||("OpenRouter HTTP "+r.status));
+ return j.choices?.[0]?.message?.content||"No model output.";
+}
+async function localAI(prompt){
+ if(!("gpu" in navigator))throw Error("WebGPU is unavailable in this browser. Try Chrome on a compatible device, or use cloud mode.");
+ if(!localEngine){
+  log("Loading small local model. First download may be large.");
+  const w=await import("https://esm.run/@mlc-ai/web-llm");
+  const model="SmolLM2-360M-Instruct-q4f32_1-MLC";
+  localEngine=await w.CreateMLCEngine(model,{initProgressCallback:p=>{$("status").textContent="Loading local model "+Math.round((p.progress||0)*100)+"%";}});
  }
- return out;
+ const r=await localEngine.chat.completions.create({messages:[
+  {role:"system",content:"You are a concise technical tutor. Teach accurately and structure lessons, troubleshooting logic, quizzes and next steps."},
+  {role:"user",content:prompt}
+ ],temperature:.3,max_tokens:1300});
+ return r.choices[0].message.content;
 }
-function synth(goal, evidence, prior){
- const terms=goal.split(/\s+/).filter(x=>x.length>4).slice(0,8);
- const useful=evidence.map(e=>e.summary).filter(Boolean);
- let summary="Goal: "+goal+"\n\nKey evidence:\n"+(useful.length?useful.map((x,i)=>(i+1)+". "+x.slice(0,420)).join("\n"):"No external evidence returned.");
- if(prior.length) summary+="\n\nPrevious memory considered: "+prior.slice(-2).map(x=>x.summary.slice(0,180)).join(" | ");
- summary+="\n\nNext self-directed step: refine the question around "+(terms.join(", ")||"the original goal")+".";
- return summary;
+async function ai(prompt){
+ const m=$("mode").value;
+ if(m==="cloud")return openRouter(prompt);
+ if(m==="local")return localAI(prompt);
+ return null;
 }
-async function runAgent(){
- if(running)return; const goal=$("goal").value.trim(); if(!goal){alert("Enter a goal first.");return}
- running=true;stopRequested=false;$("status").textContent="Running";$("log").textContent="";
- const n=Number($("iterations").value);
- try{
-  for(let i=1;i<=n;i++){
-   if(stopRequested)break;
-   $("count").textContent=i; log("\n=== Iteration "+i+" / "+n+" ===");
-   const prior=memory.filter(m=>m.goal===goal);
-   const q=i===1?goal:(goal+" "+(prior.at(-1)?.next||"new angle"));
-   log("Planning research: "+q);
-   let evidence=[];
-   try{evidence=await research(q);log("Research returned "+evidence.length+" source(s).")}catch(e){log("Research unavailable: "+e.message)}
-   const summary=synth(goal,evidence,prior);
-   const next="Investigate the strongest unresolved point from iteration "+i+" and compare it with prior evidence.";
-   memory.push({time:Date.now(),goal,topic:"Iteration "+i+": "+goal,summary,sources:evidence.map(e=>({title:e.title,url:e.url})),next});
-   save(); log("Memory saved. Recursive state updated.");
-   await new Promise(r=>setTimeout(r,450));
-  }
-  $("status").textContent=stopRequested?"Stopped":"Complete";
-  log("\n=== Agent "+(stopRequested?"stopped":"complete")+" ===");
- }finally{running=false}
+function deterministicPlan(goal,cycle,research){
+ const focus=[
+ "Networking foundations: OSI/TCP-IP, Ethernet, IPv4/IPv6, ARP, VLANs and subnetting",
+ "Switching and routing: MAC learning, STP, static routing, OSPF and BGP fundamentals",
+ "WAN/service-provider concepts: MPLS, VRF, QoS, NAT, DNS and DHCP",
+ "Linux for network engineers: processes, files, permissions, sockets, ss, ip, tcpdump and logs",
+ "4G LTE architecture: UE, eNodeB, MME, SGW, PGW/EPG, HSS and interfaces",
+ "4G EPC signalling: Attach, authentication, default bearer, GTP-C and S11/S5-S8 troubleshooting",
+ "5G fundamentals: gNB, AMF, SMF, UPF, NRF, NSSF and 4G-to-5G evolution",
+ "Cloud foundations: virtualization, containers, networking, IAM, storage and observability",
+ "AWS/OpenStack: VPC, subnets, routing, security groups, load balancing, instances and OpenStack services",
+ "Troubleshooting mastery: alarm → scope → counters/logs → packet capture → isolate → fix → verify → prevent",
+ "Interview readiness: scenario questions, call flows, commands, packet analysis and incident communication"
+ ];
+ const topic=focus[(cycle-1)%focus.length];
+ return "# Autonomous cycle "+cycle+"\n\n## Suggested focus\n"+topic+"\n\n## Public research leads\n"+research.map((x,i)=>(i+1)+". "+x.title+" — "+x.snippet+"\n"+x.url).join("\n\n")+"\n\n## Exercise\nExplain the topic using a diagram, identify three failure modes, and write a step-by-step troubleshooting flow.\n\n## Next gap\nConnect this topic to the previous and next layer rather than memorizing isolated definitions.";
 }
-$("run").onclick=runAgent;$("stop").onclick=()=>{stopRequested=true;$("status").textContent="Stopping…"};$("clear").onclick=()=>{if(confirm("Delete all agent memory from this browser?")){memory=[];save();log("Memory cleared.")}};$("export").onclick=()=>{const b=new Blob([JSON.stringify(memory,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="recursive-agent-memory.json";a.click();URL.revokeObjectURL(a.href)};
-renderMemory();
+async function cycle(n,goal){
+ $("count").textContent=n;$("bar").style.width=(n/Number($("cycles").value)*100)+"%";
+ log("\n=== CYCLE "+n+" ===");
+ const q=goal+" technical learning cycle "+n;
+ let research=[];try{research=await webResearch(q);log("Internet research: "+research.length+" Wikipedia lead(s).")}catch(e){log("No-key research limited: "+e.message)}
+ const prior=memory.slice(-4).map(x=>x.text.slice(0,1000)).join("\n---\n");
+ const prompt="Goal: "+goal+"\nCycle: "+n+"\nPrevious learning memory:\n"+prior+"\nResearch leads:\n"+JSON.stringify(research)+"\n\nAct as an autonomous curriculum architect. Decide the next highest-value lesson. Teach it from first principles, connect it to telecom/networking/cloud practice, include one worked troubleshooting scenario, a mini quiz, and a concrete next-step knowledge gap. Do not invent citations. Make the lesson useful for an engineer preparing for real operations and interviews.";
+ let textOut;
+ if($("mode").value==="research")textOut=deterministicPlan(goal,n,research);
+ else textOut=await ai(prompt);
+ $("output").textContent=textOut;
+ memory.push({time:Date.now(),stage:"Cycle "+n,text:textOut});
+ save();log("Saved cycle "+n+" to long-term browser memory.");
+}
+async function run(){
+ if(running)return;const goal=$("goal").value.trim();if(!goal){alert("Enter a goal.");return}
+ running=true;stop=false;$("status").textContent="Running";$("log").textContent="V4 autonomous session started.";settingsSave();
+ try{for(let i=1;i<=Number($("cycles").value);i++){if(stop)break;await cycle(i,goal)}}catch(e){$("status").textContent="Error";$("output").textContent="Agent error: "+e.message;log("ERROR: "+e.message)}finally{running=false;if(!stop)$("status").textContent="Complete";else $("status").textContent="Stopped"}
+}
+async function ask(){
+ const q=prompt("What do you want to ask the agent?");if(!q)return;
+ $("status").textContent="Thinking…";try{
+  let r;if($("mode").value==="research")r=deterministicPlan($("goal").value,1,await webResearch(q));else r=await ai(q);
+  $("output").textContent=r;memory.push({time:Date.now(),stage:"Direct question",text:r});save();
+ }catch(e){$("output").textContent="Error: "+e.message}finally{$("status").textContent="Ready"}
+}
+$("run").onclick=run;$("ask").onclick=ask;$("stop").onclick=()=>{stop=true;$("status").textContent="Stopping…"};
+$("clear").onclick=()=>{if(confirm("Clear all V4 learning memory on this device?")){memory=[];save();$("output").textContent="Memory cleared."}};
+$("export").onclick=()=>{const b=new Blob([JSON.stringify(memory,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="recursive-ai-agent-v4-memory.json";a.click();URL.revokeObjectURL(a.href)};
+$("key").addEventListener("change",settingsSave);$("model").addEventListener("change",settingsSave);$("web").addEventListener("change",settingsSave);
+settingsLoad();renderMemory();
 </script>
 </body>
 </html>
