@@ -4,57 +4,61 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080c16">
-<title>🧠 Recursive AI Agent V5</title>
+<title>🧠 Recursive AI Agent V6</title>
 <style>
 :root{color-scheme:dark;--bg:#080c16;--card:#101827;--line:#273449;--text:#f1f5f9;--muted:#94a3b8;--a:#7c3aed;--b:#06b6d4;--good:#4ade80;--bad:#fb7185;--warn:#fde68a}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#172554 0,#080c16 42%);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
-main{width:min(1100px,100%);margin:auto;padding:18px 14px 60px}h1{font-size:28px;margin:0}.sub{color:var(--muted);margin:5px 0 18px}
+main{width:min(1120px,100%);margin:auto;padding:18px 14px 60px}h1{font-size:28px;margin:0}.sub{color:var(--muted);margin:5px 0 18px}
 .card{background:rgba(16,24,39,.94);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 12px 35px #0003}
 label{display:block;font-weight:700;margin:0 0 7px;color:#cbd5e1}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
 textarea,input,select{width:100%;background:#090f1c;color:var(--text);border:1px solid #344257;border-radius:11px;padding:11px;font:inherit}textarea{min-height:95px;resize:vertical}
 button{border:0;border-radius:11px;padding:11px 15px;margin:5px 5px 0 0;color:white;background:linear-gradient(135deg,var(--a),#4f46e5);font-weight:750;cursor:pointer}button.secondary{background:#1e293b}button.stop{background:#7f1d1d}
 .pill{display:inline-block;border:1px solid #334155;border-radius:999px;padding:5px 9px;margin:3px;color:#bae6fd;background:#0b1423;font-size:12px}
-#output{white-space:pre-wrap;line-height:1.58;min-height:180px;max-height:650px;overflow:auto;background:#070b13;border-radius:12px;padding:14px}
-#log{white-space:pre-wrap;max-height:230px;overflow:auto;background:#070b13;border-radius:12px;padding:12px;color:#cbd5e1;font:12px ui-monospace,monospace}
+#output{white-space:pre-wrap;line-height:1.58;min-height:180px;max-height:700px;overflow:auto;background:#070b13;border-radius:12px;padding:14px}
+#log{white-space:pre-wrap;max-height:250px;overflow:auto;background:#070b13;border-radius:12px;padding:12px;color:#cbd5e1;font:12px ui-monospace,monospace}
 .mem{border-bottom:1px solid #243047;padding:10px 0}.small{font-size:12px;color:var(--muted)}.ok{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
 a{color:#67e8f9}.switch{display:flex;gap:8px;align-items:center;margin-top:9px}.switch input{width:auto}
 .progress{height:8px;background:#1e293b;border-radius:99px;overflow:hidden;margin-top:8px}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
 .chatrow{display:flex;gap:8px;align-items:flex-end}.chatrow textarea{min-height:70px}.chatrow button{height:48px;white-space:nowrap}
-.badge{font-size:12px;border:1px solid #334155;border-radius:8px;padding:4px 7px;color:#cbd5e1}
+.badge{font-size:12px;border:1px solid #334155;border-radius:8px;padding:4px 7px;color:#cbd5e1}.modelbox{background:#070b13;border-radius:12px;padding:12px;margin-top:10px}
 </style>
 </head>
 <body>
 <main>
-<h1>🧠 Recursive AI Agent V5</h1>
-<div class="sub">Interactive AI tutor • autonomous curriculum • research • persistent memory • telecom + networking + cloud</div>
+<h1>🧠 Recursive AI Agent V6 — ON STEROIDS</h1>
+<div class="sub">Direct AI tutor • autonomous learning • live model catalog • internet research • optional web search • persistent memory • no-key modes</div>
 
 <section class="card">
 <label>🎯 Master goal</label>
 <textarea id="goal">Teach me telecom, computer networking and cloud from BASIC → INTERMEDIATE → ADVANCED → INTERVIEW READY. Focus on 4G LTE/EPC, 5G fundamentals, TCP/IP, routing, switching, OSPF, BGP, MPLS, VRF, QoS, DNS/DHCP, firewalls, Linux, AWS/OpenStack and troubleshooting.</textarea>
 <div class="grid">
 <div><label>Autonomous learning cycles</label><select id="cycles"><option>1</option><option selected>3</option><option>5</option><option>10</option></select></div>
-<div><label>AI mode</label><select id="mode"><option value="cloud">☁️ Cloud AI — OpenRouter</option><option value="local">💻 Local AI — WebLLM</option><option value="research">🌐 Research planner — no API key</option></select></div>
+<div><label>AI mode</label><select id="mode"><option value="cloud">☁️ Cloud AI — OpenRouter</option><option value="local">💻 Local AI — WebLLM (no API key)</option><option value="research">🌐 Research planner (no API key)</option></select></div>
 </div>
-<div style="margin-top:10px"><span class="pill">Tutor</span><span class="pill">Researcher</span><span class="pill">Curriculum</span><span class="pill">Troubleshooter</span><span class="pill">Interview coach</span><span class="pill">Memory</span></div>
+<div style="margin-top:10px"><span class="pill">Tutor</span><span class="pill">Researcher</span><span class="pill">Curriculum</span><span class="pill">Troubleshooter</span><span class="pill">Interview coach</span><span class="pill">Memory</span><span class="pill">Model catalog</span></div>
 <br>
 <button id="run">▶ Start autonomous learning</button><button id="stop" class="stop">■ Stop</button>
 </section>
 
 <section class="card">
 <label>💬 Ask the agent directly</label>
-<div class="small" style="margin-bottom:8px">This is now a real chat input. It does NOT use the autonomous lesson generator. Ask one question and get one direct answer.</div>
-<div class="chatrow"><textarea id="question" placeholder="Example: Explain S11 Create Session Request and how I should troubleshoot a timeout."></textarea><button id="ask">Send ↗</button></div>
-<div style="margin-top:9px"><span class="badge">Memory-aware</span> <span class="badge">Research-aware</span> <span class="badge">Technical tutor</span></div>
+<div class="small" style="margin-bottom:8px">Direct Q&A is isolated from autonomous learning. Ask a question and V6 answers the question instead of generating a random curriculum.</div>
+<div class="chatrow"><textarea id="question" placeholder="Example: Explain S11 Create Session Request and troubleshoot a timeout step by step."></textarea><button id="ask">Send ↗</button></div>
+<div style="margin-top:9px"><span class="badge">Memory-aware</span> <span class="badge">Research-aware</span> <span class="badge">Internet-aware</span> <span class="badge">Technical tutor</span></div>
 </section>
 
 <section class="card">
 <label>⚙️ AI configuration</label>
 <div class="grid">
-<div><label>OpenRouter API key</label><input id="key" type="password" placeholder="sk-or-v1-…"><div class="small">Enter it only in this page. It is stored locally if enabled and is never committed to GitHub.</div></div>
-<div><label>Model</label><select id="model"><option value="openrouter/free">openrouter/free — automatic free model</option><option value="nvidia/nemotron-3-super:free">NVIDIA Nemotron 3 Super (free, if available)</option><option value="google/gemma-4-31b-it:free">Google Gemma 4 31B (free, if available)</option><option value="openai/gpt-oss-120b:free">OpenAI GPT-OSS 120B (free, if available)</option><option value="qwen/qwen3-coder:free">Qwen3 Coder (free, if available)</option></select></div>
+<div><label>OpenRouter API key</label><input id="key" type="password" placeholder="sk-or-v1-…"><div class="small">Only needed for Cloud AI. Enter it on this page; it is never committed to GitHub.</div></div>
+<div><label>Model</label><select id="model"></select></div>
 </div>
-<div class="switch"><input id="web" type="checkbox"><span>Enable OpenRouter web search when supported</span></div>
+<div class="switch"><input id="freeOnly" type="checkbox" checked><span>Show free/$0 model endpoints only</span></div>
+<div class="switch"><input id="web" type="checkbox"><span>🌐 Use live web search for Cloud AI (can add web-search cost even when the model endpoint is free)</span></div>
 <div class="switch"><input id="rememberKey" type="checkbox" checked><span>Remember API key on this device</span></div>
+<div class="switch"><input id="fallback" type="checkbox" checked><span>Automatic fallback to OpenRouter free router if the selected model fails</span></div>
+<button id="refreshModels" class="secondary">↻ Refresh live model catalog</button>
+<div id="modelInfo" class="modelbox small">Loading current OpenRouter model catalog…</div>
 </section>
 
 <section class="card">
@@ -63,8 +67,8 @@ a{color:#67e8f9}.switch{display:flex;gap:8px;align-items:center;margin-top:9px}.
 <div style="margin-top:9px"><b>Cycle:</b> <span id="count">0</span> &nbsp; <b>Knowledge records:</b> <span id="memCount">0</span> &nbsp; <b>Chat turns:</b> <span id="chatCount">0</span></div>
 </section>
 
-<section class="card"><label>🤖 Agent output</label><div id="output">V5 ready. Ask me a question above, or start autonomous learning.</div></section>
-<section class="card"><label>🔎 What the agent is doing</label><div id="log">V5 initialized. Direct questions and autonomous learning are now separate pipelines.</div></section>
+<section class="card"><label>🤖 Agent output</label><div id="output">V6 ready. Ask a question, refresh models, or start autonomous learning.</div></section>
+<section class="card"><label>🔎 Execution log</label><div id="log">V6 initialized. Direct Q&A and autonomous learning are separate pipelines.</div></section>
 
 <section class="card">
 <label>🧠 Long-term learning memory</label><div id="memory"></div>
@@ -72,78 +76,127 @@ a{color:#67e8f9}.switch{display:flex;gap:8px;align-items:center;margin-top:9px}.
 </section>
 
 <section class="card small">
-<b>V5 architecture:</b> Direct questions use <b>question → memory → optional research → AI tutor → answer → memory</b>. Autonomous learning uses a separate <b>research → curriculum → lesson → troubleshooting → quiz → next gap</b> loop. This prevents a direct question from being answered with a random curriculum plan.
+<b>V6 modes:</b><br>
+☁️ <b>Cloud AI:</b> OpenRouter gives access to a large catalog of providers/models. The live catalog can be refreshed so the model list does not depend on an old hard-coded list. OpenRouter currently exposes free endpoints as well as paid models; free endpoints are rate-limited.<br>
+💻 <b>Local AI:</b> WebLLM runs a small open model in the browser when WebGPU is available. No API key is required.<br>
+🌐 <b>Research planner:</b> public research plus deterministic study planning, no API key required.<br>
+🔎 <b>Internet:</b> V6 can use public research without an API key. Cloud AI can optionally use OpenRouter web search for fresher answers; web search is a separate service and may cost money.
 <br><br>
-<b>Important:</b> the agent improves its learning state and curriculum; it does not silently rewrite its own public website code.
+<b>Self-improvement:</b> V6 improves its curriculum, knowledge memory and next actions. It does not silently rewrite its public source code.
 </section>
 </main>
 
 <script>
-const MEM="recursive-ai-agent-v5-memory",SET="recursive-ai-agent-v5-settings",CHAT="recursive-ai-agent-v5-chat";
-let memory=JSON.parse(localStorage.getItem(MEM)||"[]"),chat=JSON.parse(localStorage.getItem(CHAT)||"[]"),running=false,stopRequested=false,localEngine=null;
+const MEM="recursive-ai-agent-v6-memory",SET="recursive-ai-agent-v6-settings",CHAT="recursive-ai-agent-v6-chat",CAT="recursive-ai-agent-v6-catalog";
+let memory=JSON.parse(localStorage.getItem(MEM)||"[]"),chat=JSON.parse(localStorage.getItem(CHAT)||"[]"),catalog=JSON.parse(localStorage.getItem(CAT)||"[]"),running=false,stopRequested=false,localEngine=null;
 const $=id=>document.getElementById(id);
-function saveMemory(){localStorage.setItem(MEM,JSON.stringify(memory));renderMemory()}
-function saveChat(){localStorage.setItem(CHAT,JSON.stringify(chat));$("chatCount").textContent=chat.length}
+function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
 function log(x){$("log").textContent+="\n"+x;$("log").scrollTop=$("log").scrollHeight}
 function setStatus(x){$("status").textContent=x}
-function renderMemory(){$("memCount").textContent=memory.length;$("memory").innerHTML=memory.length?memory.slice(-12).reverse().map(m=>"<div class='mem'><b>"+esc(m.stage)+"</b><div class='small'>"+new Date(m.time).toLocaleString()+"</div><div>"+esc(m.text).slice(0,2200)+"</div></div>").join(""):"<span class='small'>No learning records yet.</span>"}
-function esc(x){return String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
-function loadSettings(){try{const s=JSON.parse(localStorage.getItem(SET)||"{}");if(s.key)$("key").value=s.key;if(s.model)$("model").value=s.model;if(s.web)$("web").checked=true}catch{}}
-function saveSettings(){if($("rememberKey").checked)localStorage.setItem(SET,JSON.stringify({key:$("key").value,model:$("model").value,web:$("web").checked}));else localStorage.removeItem(SET)}
+function saveMemory(){localStorage.setItem(MEM,JSON.stringify(memory));renderMemory()}
+function saveChat(){localStorage.setItem(CHAT,JSON.stringify(chat));$("chatCount").textContent=chat.length}
+function renderMemory(){$("memCount").textContent=memory.length;$("memory").innerHTML=memory.length?memory.slice(-12).reverse().map(m=>"<div class='mem'><b>"+esc(m.stage)+"</b><div class='small'>"+new Date(m.time).toLocaleString()+"</div><div>"+esc(m.text).slice(0,2400)+"</div></div>").join(""):"<span class='small'>No learning records yet.</span>"}
 function memoryContext(limit=6){return memory.slice(-limit).map(m=>"["+m.stage+"]\n"+m.text.slice(0,1800)).join("\n---\n")}
+function loadSettings(){try{const s=JSON.parse(localStorage.getItem(SET)||"{}");if(s.key)$("key").value=s.key;if(s.model)$("model").value=s.model;if(s.web)$("web").checked=true;if(s.freeOnly===false)$("freeOnly").checked=false;if(s.fallback===false)$("fallback").checked=false}catch{}}
+function saveSettings(){if($("rememberKey").checked)localStorage.setItem(SET,JSON.stringify({key:$("key").value,model:$("model").value,web:$("web").checked,freeOnly:$("freeOnly").checked,fallback:$("fallback").checked}));else localStorage.removeItem(SET)}
+function staticModels(){
+ return [
+ {id:"openrouter/free",name:"OpenRouter Free Router",provider:"OpenRouter",free:true,params:"auto",context:200000},
+ {id:"nvidia/nemotron-3-ultra-550b-a55b:free",name:"NVIDIA Nemotron 3 Ultra",provider:"NVIDIA",free:true,params:"550B total / 55B active",context:1000000},
+ {id:"minimax/minimax-m3:free",name:"MiniMax M3",provider:"MiniMax",free:true,params:"see live catalog",context:1048576},
+ {id:"nvidia/nemotron-3-super:free",name:"NVIDIA Nemotron 3 Super",provider:"NVIDIA",free:true,params:"120B total / 12B active",context:1000000},
+ {id:"google/gemma-4-31b-it:free",name:"Google Gemma 4 31B",provider:"Google",free:true,params:"31B",context:262144},
+ {id:"google/gemma-4-26b-a4b-it:free",name:"Google Gemma 4 26B A4B",provider:"Google",free:true,params:"25.2B total / 3.8B active",context:262144},
+ {id:"qwen/qwen3.8-27b:free",name:"Qwen3.8 27B",provider:"Qwen",free:true,params:"27B",context:262144},
+ {id:"openai/gpt-oss-120b:free",name:"OpenAI GPT-OSS 120B",provider:"OpenAI",free:true,params:"120B",context:131072},
+ {id:"qwen/qwen3-coder:free",name:"Qwen3 Coder",provider:"Qwen",free:true,params:"live catalog",context:null}
+ ];
+}
+function chooseModels(){
+ const all=[...staticModels(),...catalog.filter(x=>x&&x.id).map(x=>({id:x.id,name:x.name||x.id,provider:x.provider||"OpenRouter",free:x.pricing&&Number(x.pricing.prompt)===0&&Number(x.pricing.completion)===0,params:x.params||x.parameter_count||"unknown",context:x.context_length||null}))];
+ const map=new Map();all.forEach(x=>{if(!map.has(x.id))map.set(x.id,x)});
+ return [...map.values()].filter(x=>!$("freeOnly").checked||x.free);
+}
+function renderModels(){
+ const old=$("model").value;const models=chooseModels();$("model").innerHTML=models.map(x=>"<option value='"+esc(x.id)+"'>"+esc(x.provider+" • "+x.name)+(x.free?" • FREE":"")+"</option>").join("");
+ if(models.some(x=>x.id===old))$("model").value=old;else if(localStorage.getItem(SET)){try{const s=JSON.parse(localStorage.getItem(SET)||"{}");if(models.some(x=>x.id===s.model))$("model").value=s.model}catch{}}
+ updateModelInfo();
+}
+function updateModelInfo(){const x=chooseModels().find(m=>m.id===$("model").value);$("modelInfo").innerHTML=x?"<b>"+esc(x.name)+"</b><br>Provider: "+esc(x.provider)+"<br>Endpoint: "+(x.free?"$0/free":"paid")+"<br>Parameters: "+esc(x.params||"unknown")+"<br>Context: "+(x.context?Number(x.context).toLocaleString()+" tokens":"see provider catalog"):"No model selected."}
+async function refreshModels(){
+ setStatus("Refreshing model catalog…");log("Fetching live OpenRouter model catalog…");
+ try{
+  const r=await fetch("https://openrouter.ai/api/v1/models");if(!r.ok)throw Error("Model catalog HTTP "+r.status);
+  const j=await r.json();catalog=(j.data||[]);localStorage.setItem(CAT,JSON.stringify(catalog));renderModels();log("✅ Live catalog loaded: "+catalog.length+" models.");setStatus("Ready");
+ }catch(e){log("Catalog refresh failed; using built-in list: "+e.message);renderModels();setStatus("Ready")}
+}
 async function research(q){
  const u="https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&srlimit=5&format=json&origin=*";
  const r=await fetch(u);if(!r.ok)throw Error("Research HTTP "+r.status);const j=await r.json();
  return (j.query?.search||[]).map(x=>({title:x.title,snippet:x.snippet.replace(/<[^>]+>/g,""),url:"https://en.wikipedia.org/wiki/"+encodeURIComponent(x.title.replaceAll(" ","_"))}));
 }
-async function openRouter(messages,tools=true){
+function webEnabledModel(){
+ const base=$("model").value;
+ if(!$("web").checked)return base;
+ if(base.endsWith(":online"))return base;
+ return base+":online";
+}
+async function openRouter(messages){
  const key=$("key").value.trim();if(!key)throw Error("OpenRouter API key is required in Cloud AI mode.");
- const body={model:$("model").value,messages,temperature:.2,max_tokens:1800};
- if(tools&&$("web").checked)body.plugins=[{id:"web"}];
- const r=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":location.href,"X-OpenRouter-Title":"Recursive AI Agent V5"},body:JSON.stringify(body)});
+ const body={model:webEnabledModel(),messages,temperature:.2,max_tokens:2200};
+ if($("web").checked)body.plugins=[{id:"web",max_results:5}];
+ const r=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":location.href,"X-Title":"Recursive AI Agent V6"},body:JSON.stringify(body)});
  const j=await r.json();if(!r.ok)throw Error(j.error?.message||("OpenRouter HTTP "+r.status));
  const out=j.choices?.[0]?.message?.content;if(!out)throw Error("The model returned no text.");
  return out;
 }
+async function openRouterWithFallback(messages){
+ try{return await openRouter(messages)}catch(e){
+  if(!$("fallback").checked)throw e;
+  log("Selected model failed: "+e.message+" — trying OpenRouter Free Router.");
+  const key=$("key").value.trim();if(!key)throw e;
+  const r=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json","HTTP-Referer":location.href,"X-Title":"Recursive AI Agent V6 fallback"},body:JSON.stringify({model:$("web").checked?"openrouter/free:online":"openrouter/free",messages,temperature:.2,max_tokens:2200})});
+  const j=await r.json();if(!r.ok)throw Error(j.error?.message||("Fallback HTTP "+r.status));return j.choices?.[0]?.message?.content||"Fallback returned no text.";
+ }
+}
 async function localAI(messages){
- if(!("gpu" in navigator))throw Error("WebGPU is unavailable. Use Cloud AI on this device.");
+ if(!("gpu" in navigator))throw Error("WebGPU is unavailable. Use Cloud AI or Research mode.");
  if(!localEngine){
   log("Loading the small local model. First load can take time.");
   const w=await import("https://esm.run/@mlc-ai/web-llm");
   localEngine=await w.CreateMLCEngine("SmolLM2-360M-Instruct-q4f32_1-MLC",{initProgressCallback:p=>setStatus("Loading local model "+Math.round((p.progress||0)*100)+"%")});
  }
- const r=await localEngine.chat.completions.create({messages,temperature:.2,max_tokens:1400});return r.choices?.[0]?.message?.content||"No local model output.";
+ const r=await localEngine.chat.completions.create({messages,temperature:.2,max_tokens:1600});return r.choices?.[0]?.message?.content||"No local model output.";
 }
-async function askAI(messages){
- if($("mode").value==="cloud")return openRouter(messages,true);
- if($("mode").value==="local")return localAI(messages);
- return null;
-}
+async function askAI(messages){if($("mode").value==="cloud")return openRouterWithFallback(messages);if($("mode").value==="local")return localAI(messages);return null}
 
 async function directAsk(){
  const q=$("question").value.trim();if(!q||running)return;
  $("question").value="";setStatus("Thinking…");log("\n💬 Direct question: "+q);
  try{
-  let sources=[];
-  try{setStatus("Researching…");sources=await research(q);log("Research returned "+sources.length+" public lead(s).")}catch(e){log("Research unavailable: "+e.message)}
-  const mem=memoryContext();
-  const recent=chat.slice(-8);
+  let sources=[];try{setStatus("Researching…");sources=await research(q);log("Public research returned "+sources.length+" lead(s).")}catch(e){log("Research unavailable: "+e.message)}
+  const mem=memoryContext(),recent=chat.slice(-8);
   const system=`You are the user's technical tutor and troubleshooting partner.
-Answer the USER'S QUESTION DIRECTLY. Do NOT turn the question into a curriculum plan unless the user asks for a plan.
-The user wants telecom, computer networking, cloud and interview-ready engineering knowledge.
-Be accurate and practical. Use 3GPP terminology for LTE/5G, RFC concepts for networking, and clearly label vendor-specific behavior.
-If the question is troubleshooting-related, reason in this order: symptom → scope → expected flow → evidence/logs/counters/pcap → isolate layer/interface/node → fix → verification → prevention.
-If information is uncertain, say so. Never invent a citation or claim that you inspected a source you did not receive.
-Give a clear answer first, then useful detail.\n\nLEARNING MEMORY:\n${mem||"(none)"}`;
-  const user=`QUESTION:\n${q}\n\nPUBLIC RESEARCH LEADS (use only as context; do not pretend these are authoritative):\n${JSON.stringify(sources)}`;
+ANSWER THE USER'S QUESTION DIRECTLY. Do not turn it into a curriculum plan unless explicitly asked.
+Teach telecom, computer networking, cloud and interview-ready engineering knowledge.
+Use 3GPP terminology for LTE/5G, RFC concepts for networking, and clearly label vendor-specific behavior.
+For troubleshooting: symptom → scope → expected flow → evidence/logs/counters/pcap → isolate layer/interface/node → fix → verify → prevent.
+Use research leads as context, but never pretend a weak source is authoritative. If uncertain, say so.
+Give the direct answer first, then detail, examples and interview points.
+LEARNING MEMORY:
+${mem||"(none)"}`;
+  const user=`QUESTION:
+${q}
+
+PUBLIC RESEARCH LEADS:
+${JSON.stringify(sources)}`;
   const msgs=[{role:"system",content:system},...recent.map(x=>({role:x.role,content:x.content})),{role:"user",content:user}];
-  setStatus("Generating answer…");const answer=$("mode").value==="research"
-    ?"Research-only mode cannot generate an AI answer. Switch to Cloud AI or Local AI.\n\nResearch leads:\n"+sources.map((s,i)=>(i+1)+". "+s.title+" — "+s.snippet+"\n"+s.url).join("\n")
-    :await askAI(msgs);
-  $("output").textContent=answer;
-  chat.push({role:"user",content:q,time:Date.now()},{role:"assistant",content:answer,time:Date.now()});
-  saveChat();memory.push({time:Date.now(),stage:"Direct Q&A",text:"Q: "+q+"\n\nA: "+answer});saveMemory();
-  log("✅ Direct answer generated and saved.");
+  setStatus("Generating answer…");
+  const answer=$("mode").value==="research"
+   ?"Research-only mode (no API key):\n\n"+sources.map((s,i)=>(i+1)+". "+s.title+" — "+s.snippet+"\n"+s.url).join("\n\n")+"\n\nV6 can generate a full AI answer here without an API key only in Local AI mode when WebGPU is available."
+   :await askAI(msgs);
+  $("output").textContent=answer;chat.push({role:"user",content:q,time:Date.now()},{role:"assistant",content:answer,time:Date.now()});saveChat();
+  memory.push({time:Date.now(),stage:"Direct Q&A",text:"Q: "+q+"\n\nA: "+answer});saveMemory();log("✅ Direct answer generated and saved.");
  }catch(e){$("output").textContent="Agent error: "+e.message;log("❌ "+e.message)}finally{setStatus("Ready")}
 }
 
@@ -160,21 +213,17 @@ const topics=[
 "Fault troubleshooting mastery: alarm → scope → evidence → isolate → fix → verify → prevent",
 "Interview readiness: packet analysis, call flows, commands, scenario questions and incident communication"
 ];
-
 async function learningCycle(n,goal){
  $("count").textContent=n;$("bar").style.width=(n/Number($("cycles").value)*100)+"%";log("\n=== AUTONOMOUS CYCLE "+n+" ===");
- const topic=topics[(n-1)%topics.length];let sources=[];
- try{setStatus("Researching cycle "+n+"…");sources=await research(goal+" "+topic);log("Research returned "+sources.length+" lead(s).")}catch(e){log("Research unavailable: "+e.message)}
+ const topic=topics[(n-1)%topics.length];let sources=[];try{setStatus("Researching cycle "+n+"…");sources=await research(goal+" "+topic);log("Research returned "+sources.length+" lead(s).")}catch(e){log("Research unavailable: "+e.message)}
  const prompt=`Goal: ${goal}
 Cycle: ${n}
 Suggested topic: ${topic}
 Previous memory:
 ${memoryContext(5)}
-
 Research leads:
 ${JSON.stringify(sources)}
-
-Act as an autonomous technical curriculum architect. Choose the highest-value lesson for this cycle, but stay aligned to the goal. Teach from first principles and connect it to real operations. Include:
+Act as an autonomous technical curriculum architect. Choose the highest-value lesson aligned to the goal. Teach from first principles and connect it to real operations. Include:
 1) lesson
 2) worked troubleshooting scenario
 3) commands/logs/pcap evidence where relevant
@@ -184,28 +233,22 @@ Act as an autonomous technical curriculum architect. Choose the highest-value le
 7) next knowledge gap
 Do not invent citations.`;
  let out;
- if($("mode").value==="research"){
-  out="# Autonomous cycle "+n+"\n\n## Focus\n"+topic+"\n\n## Research leads\n"+sources.map((s,i)=>(i+1)+". "+s.title+" — "+s.snippet+"\n"+s.url).join("\n\n")+"\n\n## Exercise\nExplain the expected flow, identify three failure points, and create a troubleshooting decision tree.";
- }else{
-  out=await askAI([{role:"system",content:"You are an autonomous technical teacher. Produce one coherent lesson, not random fragments."},{role:"user",content:prompt}]);
- }
+ if($("mode").value==="research")out="# Autonomous cycle "+n+"\n\n## Focus\n"+topic+"\n\n## Research leads\n"+sources.map((s,i)=>(i+1)+". "+s.title+" — "+s.snippet+"\n"+s.url).join("\n\n")+"\n\n## Exercise\nExplain the expected flow, identify three failure points, and create a troubleshooting decision tree.";
+ else out=await askAI([{role:"system",content:"You are an autonomous technical teacher. Produce one coherent lesson, not random fragments."},{role:"user",content:prompt}]);
  $("output").textContent=out;memory.push({time:Date.now(),stage:"Autonomous cycle "+n,text:out});saveMemory();log("✅ Cycle "+n+" saved.");
 }
-
 async function runLearning(){
  if(running)return;const goal=$("goal").value.trim();if(!goal){alert("Enter a goal.");return}
- running=true;stopRequested=false;setStatus("Starting…");$("log").textContent="V5 autonomous learning started.";saveSettings();
- try{
-  for(let i=1;i<=Number($("cycles").value);i++){if(stopRequested)break;await learningCycle(i,goal)}
- }catch(e){setStatus("Error");$("output").textContent="Learning error: "+e.message;log("❌ "+e.message)}
+ running=true;stopRequested=false;setStatus("Starting…");$("log").textContent="V6 autonomous learning started.";saveSettings();
+ try{for(let i=1;i<=Number($("cycles").value);i++){if(stopRequested)break;await learningCycle(i,goal)}}catch(e){setStatus("Error");$("output").textContent="Learning error: "+e.message;log("❌ "+e.message)}
  finally{running=false;setStatus(stopRequested?"Stopped":"Complete")}
 }
 $("run").onclick=runLearning;$("ask").onclick=directAsk;$("question").addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="Enter")directAsk()});
 $("stop").onclick=()=>{stopRequested=true;setStatus("Stopping after current request…")};
-$("clear").onclick=()=>{if(confirm("Clear all V5 learning memory on this device?")){memory=[];saveMemory();$("output").textContent="Learning memory cleared."}};
-$("export").onclick=()=>{const blob=new Blob([JSON.stringify({memory,chat},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="recursive-ai-agent-v5-memory.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
-$("key").onchange=saveSettings;$("model").onchange=saveSettings;$("web").onchange=saveSettings;
-loadSettings();renderMemory();saveChat();
+$("clear").onclick=()=>{if(confirm("Clear all V6 learning memory on this device?")){memory=[];saveMemory();$("output").textContent="Learning memory cleared."}};
+$("export").onclick=()=>{const blob=new Blob([JSON.stringify({version:"V6",memory,chat,catalogUpdated:new Date().toISOString()},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="recursive-ai-agent-v6-memory.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$("refreshModels").onclick=refreshModels;$("freeOnly").onchange=()=>{renderModels();saveSettings()};$("model").onchange=()=>{updateModelInfo();saveSettings()};$("key").onchange=saveSettings;$("web").onchange=saveSettings;$("fallback").onchange=saveSettings;
+loadSettings();renderModels();renderMemory();saveChat();refreshModels();
 </script>
 </body>
 </html>
